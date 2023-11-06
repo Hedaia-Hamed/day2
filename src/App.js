@@ -1,24 +1,73 @@
-import logo from './logo.svg';
+import { Panel } from 'rsuite';
 import './App.css';
+import {Routes , Route , useNavigate} from 'react-router-dom'
+import Student_list from './components/studentList/Student_list';
+import Class_list from './components/studentList/Class_list';
+import {IconButton, Button, ButtonToolbar } from 'rsuite';
+import { Icon } from "@rsuite/icons";
+import Homepage from './components/studentList/Homepage';
+import { React , useState } from "react";
 
-function App() {
+
+
+
+
+const  App = ()=> {
+
+  const [students, setStudents] = useState([]);
+  const [studclases, setStudentsClasses] = useState([]);
+
+
+  const addstudClass = (name) => {
+    setStudentsClasses([...studclases, { name }]);
+    console.log('studclases',studclases);
+  };
+
+
+
+  const addStudents = (name,dob,gender,class_stu,mark) => {
+    console.log('55555',name,dob,gender,class_stu,mark);
+    setStudents([...students, { name,dob,gender,class_stu,mark }]);
+
+  };
+
+
+  
+
+
+
+
+  
+
+  const navigate = useNavigate();
+
+  const panelStyle ={
+    margin : '10px',
+    backgroundColor : 'yellow'
+
+  };
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <>
+   <Panel bordered style={panelStyle}>
+
+  
+      <Button  onClick={()=>{navigate('/HomePage')}} >Homepage</Button>  
+      <Button  onClick={()=>{navigate('/Students')}} >Student List</Button>
+      <Button  onClick={()=>{navigate('/Classes')}} >Definition</Button>
+
+
+   </Panel>
+   <Routes>
+   <Route path='/HomePage' element = {<Homepage students={students} studclases={studclases}/>}/>
+    <Route path='/Students' element = {
+    
+    <Student_list  addStudents={addStudents} studclases={studclases}  students={students}/> }/>
+    <Route path='/Classes' element = {<Class_list addstudClass={addstudClass}/>}/>
+   </Routes>
+   
+   </>
   );
 }
 
