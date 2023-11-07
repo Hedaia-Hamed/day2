@@ -1,5 +1,5 @@
 import { React , useState } from "react";
-import {Input, Button ,SelectPicker } from 'rsuite';
+import {Input, Button ,SelectPicker,Form, Panel  } from 'rsuite';
 
 
 
@@ -61,11 +61,19 @@ const Student_list = (props) => {
     }
 
 
+    const panelStyle ={
+      margin : '10px',
+  
+    };
+
+
 
    
     return (
         <>
           <h2>Students</h2>
+
+<Panel bordered header="My Students" style={panelStyle}>
 
           <Input
           type="text"
@@ -74,8 +82,8 @@ const Student_list = (props) => {
           value={studentName}
           onChange={(e) => setStudentName(e)}
         />
-
-*  <Input
+<br/>
+  <Input
           type="date"
           placeholder="Date of Birth"
           style={inputStyle}
@@ -83,7 +91,7 @@ const Student_list = (props) => {
           onChange={(e) => setDob(e)}
         /> 
 
-    
+    <br/>
 
     <SelectPicker
     label="Gender"
@@ -95,8 +103,9 @@ const Student_list = (props) => {
 
 
 
-    <br/>
-        <select
+<br/>
+        <br/>
+        <select  
           value={className}
           onChange={(e) => setClassName(e.target.value)}
         >
@@ -107,6 +116,8 @@ const Student_list = (props) => {
             </option>
           ))}
         </select>
+        <br/>
+        <br/>
         <Input
           type="number"
           placeholder="Mark"
@@ -115,9 +126,10 @@ const Student_list = (props) => {
           onChange={(e) => setMark(e)}
         />
 
-
-
+<br/>
+        <br/>
 <button onClick={addNeStudent}>Add Student</button>
+
 
 
 
@@ -126,13 +138,21 @@ const Student_list = (props) => {
 <h2>Student List</h2>
       <ul>
         {props.students.map((student, index) => (
-          <li key={index}>
-            Name: {student.name}, DOB: {student.dob} , Gender :{student.gender} , ClassName : {student.class_stu}  , Mark :{student.mark}
+       
+
+<li key={index}> {index+1} - 
+            <strong>Name:</strong> {student.name},{' '}
+            <strong>Date of Birth:</strong> {student.dob},{' '}
+            <strong>Gender:</strong> {student.gender},{' '}
+            <strong>Class:</strong> {student.class_stu},{' '}
+            <strong>Mark:</strong> {student.mark}
           </li>
+
+
         ))}
       </ul>
 
-         
+      </Panel>
         </>
       );
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {Button,Input } from 'rsuite';
+import {Button,Input, Panel } from 'rsuite';
 
 
- const Class_list =  ({addstudClass})=>  {
+ const Class_list =  (props)=>  {
 
   const [className, setClassName] = useState('');
   const [class_list, setClasslist] = useState([]);
@@ -18,7 +18,7 @@ import {Button,Input } from 'rsuite';
     const _clone = [...class_list];
     _clone.push(className);
     setClasslist(_clone);
-    addstudClass(className);
+    props.addstudClass(className);
     setClassName('');
 
 
@@ -27,12 +27,17 @@ import {Button,Input } from 'rsuite';
 
 
 
+  const panelStyle ={
+    margin : '10px',
+
+  };
 
  
 
 
   return (
     <>
+    <Panel bordered header="My Classes " style={panelStyle}>
       <h1>Classes</h1>
       <Input
         style={{width:'50%'}}
@@ -41,16 +46,29 @@ import {Button,Input } from 'rsuite';
           value={className}
           onChange={createClassesStudent}
         />
-
+<br/>
+<br/>
         <Button onClick={addNewClass}>Add New Class</Button> 
 
-        {class_list.map((list,i) => {
-          return <h4 key={i}> {i+1} * {list}</h4>
+     
 
-    })
 
-        }
+        <hr/>
 
+        <h2>Class List</h2>
+
+        <ul>
+        {props.studclases.map((classname, index) => (
+       <li key={index}>
+           {index+1}  -  <strong>Name:</strong> {classname.name}
+           
+</li>
+
+        ))}
+      </ul>
+
+
+</Panel>
 
      
     </>

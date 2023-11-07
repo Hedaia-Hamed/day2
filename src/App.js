@@ -50,21 +50,20 @@ const  App = ()=> {
   
   return (
    <>
-   <Panel bordered style={panelStyle}>
+   
 
-  
       <Button  onClick={()=>{navigate('/HomePage')}} >Homepage</Button>  
-      <Button  onClick={()=>{navigate('/Students')}} >Student List</Button>
-      <Button  onClick={()=>{navigate('/Classes')}} >Definition</Button>
+      <Button  onClick={()=>{navigate('/HomePage/Students')}} >Student List</Button>
+      <Button  onClick={()=>{navigate('/HomePage/Classes')}} >Definition</Button>
 
 
-   </Panel>
+   
    <Routes>
    <Route path='/HomePage' element = {<Homepage students={students} studclases={studclases}/>}/>
-    <Route path='/Students' element = {
+    <Route path='/HomePage/Students' element = {
     
     <Student_list  addStudents={addStudents} studclases={studclases}  students={students}/> }/>
-    <Route path='/Classes' element = {<Class_list addstudClass={addstudClass}/>}/>
+    <Route path='/HomePage/Classes' element = {<Class_list addstudClass={addstudClass} studclases={studclases}/>}/>
    </Routes>
    
    </>
