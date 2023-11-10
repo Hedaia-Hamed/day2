@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet } from "react-router-dom";
 import { Panel } from "rsuite";
+import {setAllclasses} from './classListSlicer';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const Homepage = (props) => {
+
+    const classListSlicer = useSelector(
+    (state) => state.classListSlicer );
 
     const [studenum, setStudeNum] = useState(0);
     const [classnum, setSClassNum] = useState(0);
@@ -19,9 +24,11 @@ const Homepage = (props) => {
 
     useEffect(() => {
         setStudeNum(props.students.length);
-        setSClassNum(props.studclases.length);
+      
        
-      },[props.students,props.studclases])
+      },[props.students])
+
+      
 
 
 
@@ -34,7 +41,7 @@ return (
 
             <h1> Hello Students</h1>
 
-            <p>Total Classes:{classnum} </p>
+            <p>Total Classes:{classListSlicer.class_name.length} </p>
             <p>Total Students: {studenum} </p>
 
 

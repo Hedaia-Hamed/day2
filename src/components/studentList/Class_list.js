@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import {Button,Input, Panel } from 'rsuite';
 
+import { useDispatch, useSelector } from 'react-redux';
+import {setAllclasses} from './classListSlicer';
 
- const Class_list =  (props)=>  {
+
+ const Class_list =  ()=>  {
+
+
+  const classListSlicer = useSelector(
+    (state) => state.classListSlicer );
+
+  const dispatch = useDispatch();
+  
 
   const [className, setClassName] = useState('');
   const [class_list, setClasslist] = useState([]);
@@ -18,7 +28,9 @@ import {Button,Input, Panel } from 'rsuite';
     const _clone = [...class_list];
     _clone.push(className);
     setClasslist(_clone);
-    props.addstudClass(className);
+
+    //props.addstudClass(className);
+    dispatch(setAllclasses(className));
     setClassName('');
 
 
@@ -58,14 +70,14 @@ import {Button,Input, Panel } from 'rsuite';
         <h2>Class List</h2>
 
         <ul>
-        {props.studclases.map((classname, index) => (
+        {classListSlicer.class_name.map((classname, index) => (
        <li key={index}>
-           {index+1}  -  <strong>Name:</strong> {classname.name}
+           {index+1}  -  <strong>Name:</strong> {classname}
            
 </li>
 
         ))}
-      </ul>
+      </ul> 
 
 
 </Panel>

@@ -25,9 +25,9 @@ const  App = ()=> {
 
 
 
-  const addStudents = (name,dob,gender,class_stu,mark) => {
-    console.log('55555',name,dob,gender,class_stu,mark);
-    setStudents([...students, { name,dob,gender,class_stu,mark }]);
+  const addStudents = (name,dob,gender,class_stu,mark,id) => {
+    console.log('55555',name,dob,gender,class_stu,mark,id);
+    setStudents([...students, { name,dob,gender,class_stu,mark,id }]);
 
   };
 
@@ -62,8 +62,8 @@ const  App = ()=> {
    <Route path='/HomePage' element = {<Homepage students={students} studclases={studclases}/>}/>
     <Route path='/HomePage/Students' element = {
     
-    <Student_list  addStudents={addStudents} studclases={studclases}  students={students}/> }/>
-    <Route path='/HomePage/Classes' element = {<Class_list addstudClass={addstudClass} studclases={studclases}/>}/>
+    <Student_list  addStudents={addStudents} studclases={studclases}  students={students} setStudents={setStudents}/> }/>
+    <Route path='/HomePage/Classes' element = {<Class_list />}/>
    </Routes>
    
    </>

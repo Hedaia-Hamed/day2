@@ -1,20 +1,78 @@
 import { React , useState } from "react";
-import {Input, Button ,SelectPicker,Form, Panel  } from 'rsuite';
+import {Input, Button ,SelectPicker,Form, Panel ,Table } from 'rsuite';
+import { v4 as uuidv4 } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
+
+const { Column, HeaderCell, Cell } = Table;
 
 
 
+
+const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
+  const editing = rowData.status === 'EDIT';
+  return (
+    <Cell {...props} className={editing ? 'table-content-editing' : ''}>
+      {editing ? (
+        <input
+          className="rs-input"
+          defaultValue={rowData[dataKey]}
+          onChange={event => {
+            onChange && onChange(rowData.id, dataKey, event.target.value);
+          }}
+        />
+      ) : (
+        <span className="table-content-edit-span">{rowData[dataKey]}</span>
+      )}
+    </Cell>
+  );
+};
+
+
+const EditableClassCell = ({ classes, onChange }) => {
+  const handleClassChange = (index, property, value) => {
+    const newClasses = [...classes];
+    newClasses[index][property] = value;
+    onChange(newClasses);
+  };
+
+};
+
+
+
+const ActionCell = ({ rowData, dataKey, onClick, ...props }) => {
+  return (
+    <Cell {...props} style={{ padding: '6px' }}>
+      <Button
+        appearance="link"
+        onClick={() => {
+          onClick(rowData.id);
+        }}
+      >
+        {rowData.status === 'EDIT' ? 'Save' : 'Edit'}
+      </Button>
+    </Cell>
+  );
+};
 
 
 
 const Student_list = (props) => {
+
+
+    const classListSlicer = useSelector(
+    (state) => state.classListSlicer );
 
     const [studentName, setStudentName] = useState('');
     const [dob, setDob] = useState('');
     const [gender, setGender] = useState('');
     const [studentList, setStudentList] = useState([]);
 
+    const [studentclassList, setClassStudentList] = useState([]);
+
+
     const [className, setClassName] = useState('');
     const [mark, setMark] = useState(0);
+    
 
 
     const gender_data = ['Female', 'Male'].map(
@@ -33,10 +91,17 @@ const Student_list = (props) => {
             gender,
             className,
             mark: Number(mark),
+            id: uuidv4(),
+       
           };
 
-        props.addStudents(studentName,dob,gender,className,mark);
+          console.log(stud_info,stud_info)
+
+        
+
+        props.addStudents(studentName,dob,gender,className,mark,uuidv4());
         const _clone = [...studentList];
+        
         _clone.push(stud_info);
         setStudentList(_clone);
         
@@ -65,6 +130,21 @@ const Student_list = (props) => {
       margin : '10px',
   
     };
+
+
+    const handleChange = (id, key, value) => {
+      const nextData = Object.assign([], props.students);
+      nextData.find(item => item.id === id)[key] = value;
+      props.setStudents(nextData);
+    };
+    const handleEditState = id => {
+      const nextData = Object.assign([], props.students);
+      const activeItem = nextData.find(item => item.id === id);
+      activeItem.status = activeItem.status ? null : 'EDIT';
+      props.setStudents(nextData);
+    };
+
+
 
 
 
@@ -110,9 +190,9 @@ const Student_list = (props) => {
           onChange={(e) => setClassName(e.target.value)}
         >
           <option value="">Select Class</option>
-         {props.studclases.map((classObj) => (
-            <option key={classObj.name} value={classObj.name}>
-              {classObj.name}
+         {classListSlicer.class_name.map((classObj) => (
+            <option key={classObj} value={classObj}>
+              {classObj}
             </option>
           ))}
         </select>
@@ -136,21 +216,51 @@ const Student_list = (props) => {
 <hr/>
 
 <h2>Student List</h2>
-      <ul>
-        {props.students.map((student, index) => (
-       
-
-<li key={index}> {index+1} - 
-            <strong>Name:</strong> {student.name},{' '}
-            <strong>Date of Birth:</strong> {student.dob},{' '}
-            <strong>Gender:</strong> {student.gender},{' '}
-            <strong>Class:</strong> {student.class_stu},{' '}
-            <strong>Mark:</strong> {student.mark}
-          </li>
 
 
-        ))}
-      </ul>
+
+
+ 
+      <Table height={420} data={props.students}>
+      <Column width={200}>
+        <HeaderCell>First Name</HeaderCell>
+        <EditableCell dataKey="name" onChange={handleChange} />
+      </Column>
+
+      <Column width={200}>
+        <HeaderCell>Date of Brith</HeaderCell>
+        <EditableCell dataKey="dob" onChange={handleChange} />
+      </Column>
+
+      <Column width={300}>
+        <HeaderCell>Gender</HeaderCell>
+        <EditableCell dataKey="gender" onChange={handleChange} />
+      </Column>
+
+
+
+      <Column width={300}>
+        <HeaderCell>Class</HeaderCell>
+        <EditableCell dataKey="class_stu" onChange={handleChange} />
+      </Column>
+
+
+      <Column width={300}>
+        <HeaderCell>Mark</HeaderCell>
+        <EditableCell dataKey="mark" onChange={handleChange} />
+      </Column>
+
+
+
+
+
+
+      <Column flexGrow={1}>
+        <HeaderCell>...</HeaderCell>
+        <ActionCell dataKey="id" onClick={handleEditState} />
+      </Column>
+    </Table>
+
 
       </Panel>
         </>
